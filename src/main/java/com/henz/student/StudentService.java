@@ -20,7 +20,8 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
-    public void addStudent(Student student) {
+  //for better integration testing, return here the new Student object
+    public Student addStudent(Student student) {
         Boolean existsEmail = studentRepository
                 .selectExistsEmail(student.getEmail());
         if (existsEmail) {
@@ -28,7 +29,15 @@ public class StudentService {
                     "Email " + student.getEmail() + " taken");
         }
 
-        studentRepository.save(student);
+        return studentRepository.save(student); //this returns the newly saved Student instance
+    }
+    
+    public Student getStudent(Long studentId) {
+        if(!studentRepository.existsById(studentId)) {
+            throw new StudentNotFoundException(
+                    "Student with id " + studentId + " does not exists");
+        }
+        return studentRepository.findById(studentId).get();
     }
 
     public void deleteStudent(Long studentId) {
@@ -37,5 +46,15 @@ public class StudentService {
                     "Student with id " + studentId + " does not exists");
         }
         studentRepository.deleteById(studentId);
+    }
+    
+    public Student updateStudent(Long studentId, Student student) {
+    	Student existingStudent = this.studentRepository.findById(studentId).orElse(null);
+    	
+    	existingStudent.setEmail(student.getEmail());
+    	existingStudent.setName(student.getName());
+    	existingStudent.setGender(student.getGender());
+    	
+    	return this.studentRepository.save(existingStudent);
     }
 }

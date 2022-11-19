@@ -28,7 +28,7 @@ import com.henz.student.exception.BadRequestException;
 @ExtendWith(MockitoExtension.class) //instead of using AutoCloseable
 class StudentServiceTest {
 	
-	//here we do not have to test repository again. so we do not use @Autowired here. Instead we mock it
+	//here we do not have to test repository again. so we do not use @Autowired here. Instead we mock the repository because we have already tested it
 	//if we have tested something already, we can use Mocking
 	
 	@Mock
